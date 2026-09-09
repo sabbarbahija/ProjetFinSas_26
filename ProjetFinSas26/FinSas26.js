@@ -184,6 +184,7 @@ const trips = [
         availableSeats: 50
     }
 ];
+
  function AfficherTrajets(trips){
     console.log("======TRAJETS DISPONIBLES======");
     if(trips.length===0){
@@ -196,20 +197,17 @@ const trips = [
         console.log("Arrivée :",trips[i].arrivalTime);
         console.log("Prix : ",trips[i].price,"DH");
         console.log("Places disponibles : ",trips[i].availableSeats);
-        console.log("             -----------------------        ");
-    }
+        console.log("    ------------------     ");
  }
+}
 function rechercherTrajetsId(trips ,id){
    let  TabTrajets=[];
     for(let i=0;i<trips.length;i++){
         if(trips[i].id===id){
           TabTrajets.push(trips[i]);
-
         }
-
     }
-return    TabTrajets.length>0? TabTrajets : "Trajet introuvable";
-
+return TabTrajets.length>0? TabTrajets : "Trajet introuvable";
 }
  function placeDisponible(trips , id){
       for(let i=0;i<trips.length;i++){
@@ -223,6 +221,32 @@ return    TabTrajets.length>0? TabTrajets : "Trajet introuvable";
 }
 return "Trajet introuvable";
  }
+ function genererIdTickte(){
+    let newId=1;
+    for(let i=0;i<trips.length;i++){
+       if(trips[i].id>=newId){  
+       newId=ticket[i].id+1;
+    }
+ }
+ return newId;
+ }
+   function diminuerPlace(trips) {
+    if (trips.availableSeats > 0) {
+        trips.availableSeats--;
+    }
+}
+ function augmenterPlace(trajetId) {
+    let trajet = rechercherTrajetsId(trips, trajetId);
+    if (trajet) {
+        trajet.availableSeats++;
+    }
+}
+
+
+
+function afficherTickets(){
+
+}
 
 function lancerApplication() {
     let choix;
@@ -247,8 +271,7 @@ function lancerApplication() {
               AfficherTrajets(trips);
                 break;
                   case 2:
-            let id=Number(prompt("entrez id qui cherche"));
-               console.log(placeDisponible(trips ,id));
+               console.log(acheterTicket());
                 break;
                 default :
                 console.log("\nChoix invalide. Veuillez entrer un nombre entre 1 et 8.");
