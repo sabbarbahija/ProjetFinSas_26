@@ -190,10 +190,40 @@ const trips = [
     console.log("Aucun trajet disponible pour le moment.");
     return;
     }
-    for(let i=0;i<){
-        console.log()
+    for(let i=0;i<trips.length;i++){
+        console.log("#",trips[i].id,trips[i].departure,"->",trips[i].destination);
+        console.log("Depart :",trips[i].departureTime);
+        console.log("Arrivée :",trips[i].arrivalTime);
+        console.log("Prix : ",trips[i].price,"DH");
+        console.log("Places disponibles : ",trips[i].availableSeats);
+        console.log("             -----------------------        ");
     }
  }
+function rechercherTrajetsId(trips ,id){
+   let  TabTrajets=[];
+    for(let i=0;i<trips.length;i++){
+        if(trips[i].id===id){
+          TabTrajets.push(trips[i]);
+
+        }
+
+    }
+return    TabTrajets.length>0? TabTrajets : "Trajet introuvable";
+
+}
+ function placeDisponible(trips , id){
+      for(let i=0;i<trips.length;i++){
+        if(trips[i].id===id ) {
+            if( trips[i].availableSeats <= 0){
+        return "Train complet.";
+    }  else {
+        return "Train disponible.";
+  }
+ } 
+}
+return "Trajet introuvable";
+ }
+
 function lancerApplication() {
     let choix;
 
@@ -215,6 +245,10 @@ function lancerApplication() {
         switch (choix) {
             case 1:
               AfficherTrajets(trips);
+                break;
+                  case 2:
+            let id=Number(prompt("entrez id qui cherche"));
+               console.log(placeDisponible(trips ,id));
                 break;
                 default :
                 console.log("\nChoix invalide. Veuillez entrer un nombre entre 1 et 8.");
