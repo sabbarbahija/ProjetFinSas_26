@@ -329,11 +329,11 @@ function annulerTicket(trips, ticketId) {
 }
 
 function rechercherTicket() {
-    let nom = prompt("Nom du passager : ");
+    let nom = prompt("Nom du passager : ").toUpperCase().trim();
     let ticketsTrouves = [];
     let compteur = 0;
     for (let i = 0; i < tickets.length; i++) {
-        if (tickets[i].passengerName === nom) {
+        if (tickets[i].passengerName.toUpperCase().trim() === nom.toUpperCase().trim()) {
             ticketsTrouves[compteur] = tickets[i];
             compteur++;
         }
@@ -351,7 +351,7 @@ function rechercherTicket() {
     }
 }
 function filtrerTrajets() {
-    let ville = String(prompt("Ville de départ : "));
+    let ville = String(prompt("Ville de départ : ")).trim();
     let trajetsTrouves = [];
     let compteur = 0;
     for (let i = 0; i < trips.length; i++) {
@@ -410,7 +410,7 @@ function lancerApplication() {
                 AfficherTrajets(trips);
                 break;
             case 2:
-                let nom = prompt("Entrez le nom du passager : ");
+                let nom = prompt("Entrez le nom du passager : ").toUpperCase().trim();
                 let idTrajet = Number(prompt("Entrez l'ID du trajet : "));
                 acheterTicket(trips, nom, idTrajet);
                 break;
