@@ -281,11 +281,17 @@ function afficherTicket(ticket) {
     console.log("Place : " + ticket.seatNumber);
     console.log("Prix : " + ticket.price + " DH");
 }
-
-function afficherTickets(){
-
+function afficherTicketTous() {
+console.log("======TICKETS DISPONIBLES======");
+    if (tickets.length === 0) {
+        console.log("Aucun ticket disponible pour le moment.");
+        return;
+    }
+    for (let i = 0; i < tickets.length; i++) {
+         afficherTicket(tickets[i]);
+    }
+    
 }
-
 function lancerApplication() {
     let choix;
 
@@ -312,6 +318,9 @@ function lancerApplication() {
                 let nom = prompt("Entrez le nom du passager : ");
                 let idTrajet = Number(prompt("Entrez l'ID du trajet : "));
                 acheterTicket(trips, nom, idTrajet);
+                break;
+                  case 3:
+                afficherTicketTous();
                 break;
                 default :
                 console.log("\nChoix invalide. Veuillez entrer un nombre entre 1 et 8.");
