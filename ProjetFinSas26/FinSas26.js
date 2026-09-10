@@ -370,6 +370,22 @@ function filtrerTrajets() {
         console.log(t.departure + " -->" + t.destination + ":" + t.price + " DH");
     }
 }
+function trierTrajets(){
+    for(let i = 0; i < trips.length - 1; i++){
+        for(let j = 0; j < trips.length - 1 - i; j++){
+            if(trips[j].price > trips[j + 1].price){
+                let temp = trips[j];
+                trips[j] = trips[j + 1];
+                trips[j + 1] = temp;
+            }
+        }
+    }
+    console.log("--- Trajets triés par prix croissant ---");
+    for(let i = 0; i < trips.length; i++){
+        let t = trips[i];
+        console.log(t.departure+ " --> " + t.destination+ " : " + t.price + " DH");
+    }
+}
 
 function lancerApplication() {
     let choix;
@@ -411,11 +427,14 @@ function lancerApplication() {
                 case 6:
                 filtrerTrajets();
                 break;
+                  case 7:
+                trierTrajets();
+                break;
 
             default:
-                console.log("\nChoix invalide. Veuillez entrer un nombre entre 1 et 8.");
+                console.log("\nChoix invalide. Veuillez entrer un nombre entre 1 et 7 OU 0 pour quiter.");
         }
 
-    } while (choix !== 8);
+    } while (choix !== 0);
 }
 lancerApplication();
