@@ -408,6 +408,10 @@ function lancerApplication() {
             case 5:
                 rechercherTicket();
                 break;
+                case 6:
+                filtrerTrajets();
+                break;
+
             default:
                 console.log("\nChoix invalide. Veuillez entrer un nombre entre 1 et 8.");
         }
