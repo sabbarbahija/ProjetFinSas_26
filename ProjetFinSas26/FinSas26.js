@@ -325,6 +325,29 @@ if(sup){
 }
     console.log("Ticket annulé avec succès.");
 }
+
+function rechercherTicket(){
+    let nom = prompt("Nom du passager : ");
+    let ticketsTrouves = [];
+    let compteur = 0;
+    for(let i = 0; i < tickets.length; i++){
+        if(tickets[i].passengerName === nom){ 
+            ticketsTrouves[compteur] = tickets[i];
+            compteur++;
+        }
+    }
+
+    if(compteur === 0){
+        console.log("Aucun ticket trouvé pour " + nom);
+        return;
+    }
+
+    console.log("\n--- Tickets de " + nom + " ---");
+
+    for(let i = 0; i < compteur; i++){
+        afficherTicket(ticketsTrouves[i]);
+    }
+}
 function lancerApplication() {
     let choix;
 
@@ -358,6 +381,9 @@ function lancerApplication() {
                   case 4:
                 let idAnnuler = +(prompt("Entrez l'ID du ticket à annuler : "));
                 annulerTicket(trips, idAnnuler); 
+                break;
+                 case 5:
+              rechercherTicket();
                 break;
                 default :
                 console.log("\nChoix invalide. Veuillez entrer un nombre entre 1 et 8.");
