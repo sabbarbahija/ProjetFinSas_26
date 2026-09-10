@@ -292,6 +292,39 @@ console.log("======TICKETS DISPONIBLES======");
     }
     
 }
+function rechercherTicketParId(ticketId) {
+    for (let i = 0; i < tickets.length; i++) {
+        if (tickets[i].id === ticketId) {
+         return tickets[i];
+        }   }
+    return null;
+}
+
+function supprimerTicket(ticketId) {
+    for (let i = 0; i < tickets.length; i++) {
+        if (tickets[i].id === ticketId) {
+            tickets.splice(i, 1); 
+                   return;
+        } }
+}
+
+
+function annulerTicket(trips, ticketId) {
+
+    let ticket = rechercherTicketParId(ticketId);
+
+    if (ticket === null) {
+        console.log("Ticket introuvable.");
+        return;
+    }
+    let tripId = ticket.tripId;
+    supprimerTicket(ticketId);
+     let sup=augmenterPlace( tripId,trips);
+if(sup){
+
+}
+    console.log("Ticket annulé avec succès.");
+}
 function lancerApplication() {
     let choix;
 
@@ -321,6 +354,10 @@ function lancerApplication() {
                 break;
                   case 3:
                 afficherTicketTous();
+                break;
+                  case 4:
+                let idAnnuler = +(prompt("Entrez l'ID du ticket à annuler : "));
+                annulerTicket(trips, idAnnuler); 
                 break;
                 default :
                 console.log("\nChoix invalide. Veuillez entrer un nombre entre 1 et 8.");
