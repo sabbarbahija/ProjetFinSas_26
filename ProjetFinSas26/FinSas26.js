@@ -216,7 +216,21 @@ function trajetExiste(trips) {
 function placeDisponible(trajet) {
     return trajet.availableSeats > 0;
 }
-
+function trouverPlaceLibre(tripId) {
+    for(let num = 1; num <= 50; num++){
+        let place = false;
+        for(let i = 0; i < tickets.length; i++){
+            if(tickets[i].tripId === tripId && tickets[i].seatNumber === num){
+                place = true;
+                break;
+            }
+        }
+        if(!place){
+            return num;
+        }
+    }
+    return -1;
+}
 function genererIdTicket() {
     let newId = 0;
     for (let i = 0; i < tickets.length; i++) {
@@ -247,21 +261,7 @@ if(seatNumber===-1){
 function diminuerPlace(trajet) {
     trajet.availableSeats--;
 }
-function trouverPlaceLibre(tripId) {
-    for(let num = 1; num <= 50; num++){
-        let place = false;
-        for(let i = 0; i < tickets.length; i++){
-            if(tickets[i].tripId === tripId && tickets[i].seatNumber === num){
-                place = true;
-                break;
-            }
-        }
-        if(!place){
-            return num;
-        }
-    }
-    return -1;
-}
+
 function augmenterPlace(trajetId, trips) {
     let trajet = rechercherTrajetsId(trips, trajetId);
     if (trajet) {
