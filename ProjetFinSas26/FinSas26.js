@@ -229,7 +229,10 @@ function genererIdTicket() {
 function creerTicket(trips, tripId, passengerName) {
     let trajet = rechercherTrajetsId(trips, tripId);
     let id = genererIdTicket();
-    let seatNumber = 50 - trajet.availableSeats + 1;
+    let seatNumber =trouverPlaceLibre(tripId);
+if(seatNumber===-1){
+    return null;
+}
 
     let ticket = {
         id: id,
@@ -243,6 +246,21 @@ function creerTicket(trips, tripId, passengerName) {
 }
 function diminuerPlace(trajet) {
     trajet.availableSeats--;
+}
+function trouverPlaceLibre(tripId) {
+    for(let num = 1; num <= 50; num++){
+        let place = false;
+        for(let i = 0; i < tickets.length; i++){
+            if(tickets[i].tripId === tripId && tickets[i].seatNumber === num){
+                place = true;
+                break;
+            }
+        }
+        if(!place){
+            return num;
+        }
+    }
+    return -1;
 }
 function augmenterPlace(trajetId, trips) {
     let trajet = rechercherTrajetsId(trips, trajetId);
@@ -266,7 +284,6 @@ function acheterTicket(trips, passengerName, tripId) {
         console.log("Train complet.");
         return;
     }
-
     let ticket = creerTicket(trips, tripId, passengerName);
     diminuerPlace(trajet);
     ajouterTicket(ticket);
@@ -321,19 +338,39 @@ function annulerTicket(trips, ticketId) {
     }
     let tripId = ticket.tripId;
     supprimerTicket(ticketId);
-    let sup = augmenterPlace(tripId, trips);
-    if (sup) {
-
-    }
+     augmenterPlace(tripId, trips);
     console.log("Ticket annulé avec succès.");
 }
 
+function saisirNombre(message) {
+    let valeur;
+    do {
+        valeur = prompt(message).trim();
+        if (valeur === "") {
+            console.log("Erreur: Vous devez entrer une valeur.");
+        } else if (isNaN(valeur)) {
+            console.log("Erreur: Vous devez entrer un nombre.");
+            valeur = "";
+        }
+    } while (valeur === "");
+    return Number(valeur);
+}
+function saisirTexte(message) {
+    let valeur;
+    do {
+        valeur = prompt(message).trim();
+        if (valeur === "") {
+            console.log("Erreur: Vous devez entrer une valeur.");
+        }
+    } while (valeur === "");
+    return valeur.toUpperCase();
+}
 function rechercherTicket() {
-    let nom = prompt("Nom du passager : ").toUpperCase().trim();
+    let nom = saisirTexte("Nom du passager : ");
     let ticketsTrouves = [];
     let compteur = 0;
     for (let i = 0; i < tickets.length; i++) {
-        if (tickets[i].passengerName.toUpperCase().trim() === nom.toUpperCase().trim()) {
+        if (tickets[i].passengerName === nom) {
             ticketsTrouves[compteur] = tickets[i];
             compteur++;
         }
@@ -351,11 +388,11 @@ function rechercherTicket() {
     }
 }
 function filtrerTrajets() {
-    let ville = String(prompt("Ville de départ : ")).trim();
+    let ville = saisirTexte("Ville de départ : ");
     let trajetsTrouves = [];
     let compteur = 0;
     for (let i = 0; i < trips.length; i++) {
-        if (trips[i].departure === ville) {
+        if (trips[i].departure.toUpperCase() === ville) {
             trajetsTrouves[compteur] = trips[i];
             compteur++;
         }
@@ -370,10 +407,10 @@ function filtrerTrajets() {
         console.log(t.departure + " -->" + t.destination + ":" + t.price + " DH");
     }
 }
-function trierTrajets(){
-    for(let i = 0; i < trips.length - 1; i++){
-        for(let j = 0; j < trips.length - 1 - i; j++){
-            if(trips[j].price > trips[j + 1].price){
+function trierTrajets() {
+    for (let i = 0; i < trips.length - 1; i++) {
+        for (let j = 0; j < trips.length - 1 - i; j++) {
+            if (trips[j].price > trips[j + 1].price) {
                 let temp = trips[j];
                 trips[j] = trips[j + 1];
                 trips[j + 1] = temp;
@@ -381,12 +418,22 @@ function trierTrajets(){
         }
     }
     console.log("--- Trajets triés par prix croissant ---");
-    for(let i = 0; i < trips.length; i++){
+    for (let i = 0; i < trips.length; i++) {
         let t = trips[i];
-        console.log(t.departure+ " --> " + t.destination+ " : " + t.price + " DH");
+        console.log(t.departure + " --> " + t.destination + " : " + t.price + " DH");
     }
 }
 
+function afficherStatistiques() {
+    console.log("========== STATISTIQUES ==========");
+    console.log("1. Nombre total de tickets vendus : " + tickets.length);
+    //2 
+    let revenuTotal = 0;
+    for (let i = 0; i < tickets.length; i++) {
+        revenuTotal = revenuTotal + tickets[i].price;
+    }
+    console.log("2. Revenu total : " + revenuTotal + " DH");
+}
 function lancerApplication() {
     let choix;
 
@@ -403,32 +450,39 @@ function lancerApplication() {
         console.log("5. Rechercher un ticket");
         console.log("6. Filtrer les trajets");
         console.log("7. Trier les trajets");
-        console.log("8. Quitter");
-        choix = Number(prompt("Votre choix : "));
+         console.log("8. Afficher Statistique");
+        console.log("0. Quitter");
+        choix = saisirNombre("Votre choix : ");
         switch (choix) {
             case 1:
                 AfficherTrajets(trips);
                 break;
             case 2:
-                let nom = prompt("Entrez le nom du passager : ").toUpperCase().trim();
-                let idTrajet = Number(prompt("Entrez l'ID du trajet : "));
+                let nom = saisirTexte("Entrez le nom du passager : ");
+                let idTrajet = saisirNombre("Entrez l'ID du trajet : ");
                 acheterTicket(trips, nom, idTrajet);
                 break;
             case 3:
                 afficherTicketTous();
                 break;
             case 4:
-                let idAnnuler = +(prompt("Entrez l'ID du ticket à annuler : "));
+                let idAnnuler = saisirNombre("Entrez l'ID du ticket à annuler : ");
                 annulerTicket(trips, idAnnuler);
                 break;
             case 5:
                 rechercherTicket();
                 break;
-                case 6:
+            case 6:
                 filtrerTrajets();
                 break;
-                  case 7:
+            case 7:
                 trierTrajets();
+                break;
+            case 8:
+                afficherStatistiques();
+                break;
+            case 0:
+                console.log("  Au revoir !   ");
                 break;
 
             default:
